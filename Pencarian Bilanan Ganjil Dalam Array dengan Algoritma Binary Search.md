@@ -12,7 +12,6 @@
 
 ### Source Code :
 ```python
-# @title
 import time
 import matplotlib.pyplot as plt
 from prettytable import PrettyTable
