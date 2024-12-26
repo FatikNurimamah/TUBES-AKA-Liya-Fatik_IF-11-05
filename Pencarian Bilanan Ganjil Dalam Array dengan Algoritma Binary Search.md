@@ -4,9 +4,9 @@
 <br>
 
 <p align="center">
-  <strong>Disusun Oleh:</strong><br>
-  Liya Khoirunnisa / 2311102124<br>
-  Fatik Nurimamah / 2311102190<br>
+  <strong>TIM:</strong><br>
+  Liya Khoirunnisa (2311102124)<br>
+  Fatik Nurimamah (2311102190)<br>
   S1 IF 11 05
 
 
