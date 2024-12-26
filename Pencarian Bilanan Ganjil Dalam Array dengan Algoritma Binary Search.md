@@ -4,7 +4,7 @@
 <br>
 
 <p align="center">
-  <strong>TIM:</strong><br>
+  <strong>LIFAT TEAM:</strong><br>
   Liya Khoirunnisa (2311102124)<br>
   Fatik Nurimamah (2311102190)<br>
   S1 IF 11 05
