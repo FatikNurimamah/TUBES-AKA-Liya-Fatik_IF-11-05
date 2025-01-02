@@ -14,7 +14,7 @@
 ```python
 import time
 import matplotlib.pyplot as plt
-from prettytable import PrettyTable
+from prettytable import PrettyTable  # Mengimpor PrettyTable
 
 # Fungsi untuk melakukan Binary Search secara iteratif
 def pencarianBinerIteratif(arr, target):
@@ -45,74 +45,96 @@ def pencarianBinerRekursif(arr, target, rendah, tinggi):
 def cariBilanganGanjil(arr):
     return [x for x in arr if x % 2 != 0]
 
-# List untuk menyimpan data ukuran array dan waktu eksekusi
-ukuranArray = []  # Menyimpan ukuran array yang diuji
-waktuIteratif = []  # Menyimpan waktu eksekusi untuk metode iteratif
-waktuRekursif = []  # Menyimpan waktu eksekusi untuk metode rekursif
-
-# Fungsi untuk mencetak tabel perbandingan waktu eksekusi
-def cetakTabelEksekusi():
-    tabel = PrettyTable()
-    tabel.field_names = ["Ukuran Array", "Waktu Iteratif (s)", "Waktu Rekursif (s)"]
-    for i in range(len(ukuranArray)):
-        tabel.add_row([ukuranArray[i], waktuIteratif[i], waktuRekursif[i]])
-    print(tabel)
-
-# Fungsi untuk memperbarui grafik perbandingan waktu eksekusi
-def perbaruiGrafik():
+# Fungsi untuk memperbarui grafik
+def perbaruiGrafik(targets, waktuIteratif, waktuRekursif):
     plt.figure(figsize=(8, 6))
-    plt.plot(ukuranArray, waktuIteratif, label='Iteratif', marker='o', linestyle='-')
-    plt.plot(ukuranArray, waktuRekursif, label='Rekursif', marker='x', linestyle='-')
+    plt.plot(targets, waktuIteratif, label='Iteratif', marker='o', linestyle='-')
+    plt.plot(targets, waktuRekursif, label='Rekursif', marker='x', linestyle='-')
     plt.title('Perbandingan Waktu Eksekusi Binary Search (Iteratif vs Rekursif)')
-    plt.xlabel('Ukuran Array')
+    plt.xlabel('Inputan (Angka)')
     plt.ylabel('Waktu Eksekusi (detik)')
     plt.legend()
     plt.grid(True)
     plt.show(block=False)
     plt.pause(0.1)
 
-# Input data secara manual
-while True:
-    try:
-        ukuranInput = input("Masukkan ukuran array (ketik 'selesai' untuk keluar): ")
+# Fungsi untuk mencetak tabel eksekusi
+def cetakTabelEksekusi(targets, waktuIteratif, waktuRekursif):
+    tabel = PrettyTable()
+    tabel.field_names = ["Inputan (Angka)", "Waktu Iteratif (s)", "Waktu Rekursif (s)"]
+    for i in range(len(targets)):
+        tabel.add_row([targets[i], waktuIteratif[i], waktuRekursif[i]])
+    print(tabel)
 
-        if ukuranInput.lower() == "selesai":
-            break  # Keluar dari loop jika pengguna mengetik 'selesai'
 
-        ukuran = int(ukuranInput)  # Mengkonversi input menjadi ukuran array
-        arr = list(range(1, ukuran + 1))  # Membuat array dengan elemen dari 1 hingga 'ukuran'
+    
+targets = []  # Menyimpan target yang dicari
+waktuIteratif = []  # Menyimpan waktu eksekusi iteratif
+waktuRekursif = []  # Menyimpan waktu eksekusi rekursif
+    
+try:
+    # Input ukuran array
+    ukuran = int(input("Masukkan ukuran array: "))  
+    arr = list(map(int, input(f"Masukkan {ukuran} angka dipisahkan dengan spasi: ").split()))
+    
+    if len(arr) != ukuran:
+        print("Jumlah angka yang dimasukkan tidak sesuai dengan ukuran array!")
+    else:
         bilanganGanjil = cariBilanganGanjil(arr)  # Mencari bilangan ganjil dalam array
 
-        waktuIteratifTotal = 0  # Inisialisasi variabel untuk menghitung total waktu eksekusi iteratif
-        waktuRekursifTotal = 0  # Inisialisasi variabel untuk menghitung total waktu eksekusi rekursif
+        if not bilanganGanjil:
+            print("Tidak ada bilangan ganjil dalam array.")
+        else:
+            print("Bilangan ganjil dalam array:", bilanganGanjil)
 
-        # Mengukur waktu untuk mencari setiap bilangan ganjil
-        for target in bilanganGanjil:
-            # Menghitung waktu eksekusi untuk metode iteratif
-            mulaiIteratif = time.time()
-            pencarianBinerIteratif(bilanganGanjil, target)
-            selesaiIteratif = time.time()
-            waktuIteratifTotal += selesaiIteratif - mulaiIteratif
+            # Melakukan pencarian angka berkali-kali
+            while True:
+                # Input angka yang akan dicari
+                target = int(input("Masukkan angka ganjil yang ingin dicari (atau -1 untuk berhenti): "))
+                if target == -1:  # Jika -1 dimasukkan, berhenti
+                    break
 
-            # Menghitung waktu eksekusi untuk metode rekursif
-            mulaiRekursif = time.time()
-            pencarianBinerRekursif(bilanganGanjil, target, 0, len(bilanganGanjil) - 1)
-            selesaiRekursif = time.time()
-            waktuRekursifTotal += selesaiRekursif - mulaiRekursif
+                if target not in bilanganGanjil:
+                    print(f"Angka {target} tidak ditemukan dalam daftar bilangan ganjil.")
+                    continue
 
-        # Hitung rata-rata waktu per pencarian
-        waktuIteratif.append(waktuIteratifTotal / len(bilanganGanjil))
-        waktuRekursif.append(waktuRekursifTotal / len(bilanganGanjil))
+                # Menambahkan target yang dicari untuk grafik
+                targets.append(target)
 
-        # Tambahkan ukuran array ke daftar ukuranArray
-        ukuranArray.append(ukuran)
+                # Ukur waktu untuk pencarian biner iteratif
+                start = time.time()
+                indeks_iteratif = pencarianBinerIteratif(bilanganGanjil, target)
+                end = time.time()
+                waktu_iteratif = end - start
 
-        # Cetak tabel dan perbarui grafik
-        cetakTabelEksekusi()
-        perbaruiGrafik()
+                # Ukur waktu untuk pencarian biner rekursif
+                start = time.time()
+                indeks_rekursif = pencarianBinerRekursif(bilanganGanjil, target, 0, len(bilanganGanjil) - 1)
+                end = time.time()
+                waktu_rekursif = end - start
 
-    except ValueError:
-        print("Masukkan angka yang valid!")  # Menangani input yang tidak valid
+                if indeks_iteratif != -1:
+                    print(f"Angka {target} ditemukan pada indeks {indeks_iteratif} di array bilangan ganjil (iteratif).")
+                else:
+                    print(f"Angka {target} tidak ditemukan di array bilangan ganjil (iteratif).")
+
+                if indeks_rekursif != -1:
+                    print(f"Angka {target} ditemukan pada indeks {indeks_rekursif} di array bilangan ganjil (rekursif).")
+                else:
+                    print(f"Angka {target} tidak ditemukan di array bilangan ganjil (rekursif).")
+
+                # Menambahkan waktu eksekusi untuk grafik
+                waktuIteratif.append(waktu_iteratif)  # Menyimpan waktu eksekusi iteratif
+                waktuRekursif.append(waktu_rekursif)  # Menyimpan waktu eksekusi rekursif
+
+                # Memperbarui grafik setelah eksekusi
+                perbaruiGrafik(targets, waktuIteratif, waktuRekursif)
+
+                # Menampilkan tabel eksekusi
+                cetakTabelEksekusi(targets, waktuIteratif, waktuRekursif)
+
+except ValueError:
+    print("Masukkan angka yang valid!")
 
 ```
 
